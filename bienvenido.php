@@ -1,3 +1,10 @@
+<?php
+session_start();
+if(!isset($_SESSION['nombres'])){
+    header("Location: login.html");
+
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -22,7 +29,9 @@ crossorigin="anonymous">
         <?php
 
         //Obterner las variable
-        $nombre=($_GET['nombres']);
+        
+        $nombres=$_SESSION['nombres']." ".$_SESSION['apellidos'];
+
         
         ?>
 
@@ -30,7 +39,7 @@ crossorigin="anonymous">
         <h9> FECHA DE INGRESO: </h9>
         <h9 id="HoraActual"> </h9>
         <p> </p>
-        <h15> USUARIO: <?php echo "$nombre"; ?> </h15>
+        <h15> USUARIO: <?php echo "$nombres"; ?> </h15>
         <br> </br> 
         <h9> kevinguerrero1004133@gmail.com</h9>
         <p> </p> 
@@ -52,7 +61,9 @@ crossorigin="anonymous">
 
 
        function salir(){
+        <?php session_destroy(); ?>
         window.location.href = "login.html";
+        
 
 }    
 

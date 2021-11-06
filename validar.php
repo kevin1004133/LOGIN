@@ -1,6 +1,7 @@
 
-
 <?php
+session_start();
+
 $user=$_POST["user"];
 $pw=$_POST["passwd"];
 
@@ -11,18 +12,25 @@ $pwm5=md5($pw);
 //conexion
 include_once "conexion.php";
 
-$sql = "SELECT user,password,nombres,apellidos FROM usuario WHERE user='$user' and password='$pwm5'";
+//$sql = "SELECT user,password,nombres,apellidos FROM usuario WHERE user='$user' and password='$pwm5'";
 
-$result = $conn->query($sql);
+$stm=$conn->prepare("SELECT user,password,nombres,apellidos FROM usuario WHERE user=? and password=? ");
+$stm->bind_param('ss',$user,$pwm5);
+$stm->execute();
+//$stm->bind_results($result);
+$result=$stm->get_result();
+//$result = $conn->query($sql);
+
 
 //comprobacion de usuario y contraseña correctos
 if ($result->num_rows > 0) {
   // output data of each row
   while($row = $result->fetch_assoc()) {
 
-    $nombre= $row['nombres']." ".$row['apellidos'];
-    header("Location: bienvenido.php?nombres=$nombre");
-    echo "user: " . $row["user"]. "<br>";
+    $_SESSION['nombres']=$row['nombres'];
+    $_SESSION['apellidos']=$row['apellidos'];
+    header("Location: bienvenido.php");
+   // echo "user: " . $row["user"]. "<br>";
 
   }
 } else {
